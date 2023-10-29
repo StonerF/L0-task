@@ -1,0 +1,21 @@
+version: '3.5'
+
+services:
+    postgres:
+      restart: always
+      image: postgres:16.0-alpine
+      environment:
+        POSTGRES_USER: ${POSTGRES_USER:-postgres}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-admin}
+        PGDATA: /data/postgres
+      volumes:
+        - ./db/create.sql:/docker-entrypoint-initdb.d/create.sql
+      ports:
+        - "54321:5432"
+    nats:
+      image: "nats-streaming:0.17.0"
+      ports:
+        - "8222:8222"
+        - "4222:4222"
+networks:
+  default:
